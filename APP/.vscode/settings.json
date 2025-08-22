@@ -1,0 +1,12 @@
+{
+    "files.exclude": {
+        "**/.vscode": true
+    },
+    "files.associations": {
+        "uart.h": "c",
+        "sys.h": "c",
+        "string.h": "c",
+        "STRING.H": "cpp",
+        "stdio.h": "c"
+    }
+}

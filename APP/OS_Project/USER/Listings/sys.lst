@@ -1,10 +1,10 @@
-C51 COMPILER V9.60.7.0   SYS                                                               08/21/2025 22:03:12 PAGE 1   
+C51 COMPILER V9.52.0.0   SYS                                                               08/22/2025 16:45:04 PAGE 1   
 
 
-C51 COMPILER V9.60.7.0, COMPILATION OF MODULE SYS
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE SYS
 OBJECT MODULE PLACED IN ..\Output\sys.obj
-COMPILER INVOKED BY: D:\APP\KEIL\MDK\C51\BIN\C51.EXE sys.c LARGE OMF2 OPTIMIZE(3,SIZE) BROWSE INCDIR(..\USER;..\HANDWARE
-                    -) DEBUG PRINT(.\Listings\sys.lst) TABS(2) OBJECT(..\Output\sys.obj)
+COMPILER INVOKED BY: D:\APP\KEIL_V5\MDK\C51\BIN\C51.EXE sys.c LARGE OMF2 OPTIMIZE(3,SIZE) BROWSE INCDIR(..\USER;..\HANDW
+                    -ARE) DEBUG PRINT(.\Listings\sys.lst) TABS(2) OBJECT(..\Output\sys.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52   1        sys_cpu_init();//核心寄存器初始化
   53   1        sys_timer2_init();//定时器2初始化
   54   1      }
-C51 COMPILER V9.60.7.0   SYS                                                               08/21/2025 22:03:12 PAGE 2   
+C51 COMPILER V9.52.0.0   SYS                                                               08/22/2025 16:45:04 PAGE 2   
 
   55          
   56          
@@ -126,7 +126,7 @@ line level    source
  114   3            *buf++ = DATA1;
  115   3            *buf++ = DATA0;                      
  116   3            i = 0;
-C51 COMPILER V9.60.7.0   SYS                                                               08/21/2025 22:03:12 PAGE 3   
+C51 COMPILER V9.52.0.0   SYS                                                               08/22/2025 16:45:04 PAGE 3   
 
  117   3            len--;  
  118   3          }
@@ -190,7 +190,7 @@ line level    source
  176   1          delay_tick--;
  177   1      }
  178          
-C51 COMPILER V9.60.7.0   SYS                                                               08/21/2025 22:03:12 PAGE 4   
+C51 COMPILER V9.52.0.0   SYS                                                               08/22/2025 16:45:04 PAGE 4   
 
  179          
  180          
