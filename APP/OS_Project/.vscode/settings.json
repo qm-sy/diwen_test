@@ -4,6 +4,7 @@
     },
     "files.associations": {
         "uart.h": "c",
-        "sys.h": "c"
+        "sys.h": "c",
+        "tim.h": "c"
     }
 }

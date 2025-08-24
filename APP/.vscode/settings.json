@@ -7,6 +7,12 @@
         "sys.h": "c",
         "string.h": "c",
         "STRING.H": "cpp",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "tim.h": "c",
+        "communication.h": "c",
+        "modbus.h": "c",
+        "cstdint": "c",
+        "main.h": "c",
+        "gpio.h": "c"
     }
 }
