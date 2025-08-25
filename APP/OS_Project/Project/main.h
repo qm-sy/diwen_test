@@ -5,5 +5,6 @@
 #include "modbus.h"
 #include "communication.h"
 #include "gpio.h"
+#include "button.h"
 
 #endif

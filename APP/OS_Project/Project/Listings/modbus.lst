@@ -1,11 +1,11 @@
-C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 1   
+C51 COMPILER V9.60.7.0   MODBUS                                                            08/25/2025 22:37:02 PAGE 1   
 
 
-C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MODBUS
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MODBUS
 OBJECT MODULE PLACED IN ..\Output\modbus.obj
-COMPILER INVOKED BY: D:\APP\KEIL_V5\MDK\C51\BIN\C51.EXE ..\Emembed\Src\modbus.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..
-                    -\BSP\Inc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\modbus.lst) TABS(2) OBJECT(
-                    -..\Output\modbus.obj)
+COMPILER INVOKED BY: D:\APP\KEIL\MDK\C51\BIN\C51.EXE ..\Emembed\Src\modbus.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BS
+                    -P\Inc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\modbus.lst) TABS(2) OBJECT(..\
+                    -Output\modbus.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   51   2              /*3.CRC校验                                         */
   52   2              crc = MODBUS_CRC16(rs485_4.RX4_buf, rs485_4.RX4_rev_cnt-2);
   53   2              rccrc = (rs485_4.RX4_buf[rs485_4.RX4_rev_cnt-1]) | (rs485_4.RX4_buf[rs485_4.RX4_rev_cnt-2]<<8);
-C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 2   
+C51 COMPILER V9.60.7.0   MODBUS                                                            08/25/2025 22:37:02 PAGE 2   
 
   54   2      
   55   2              /*4.清空接收计数                                    */
@@ -126,7 +126,7 @@ line level    source
  113   1      }
  114          
  115          void Modbus_Fun6( void )
-C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 3   
+C51 COMPILER V9.60.7.0   MODBUS                                                            08/25/2025 22:37:02 PAGE 3   
 
  116          {
  117   1          // memcpy(rs485_2.TX2_buf,rs485_2.RX2_buf,8);
@@ -190,7 +190,7 @@ line level    source
  173   3                  /* 4, 如果最低位为0，把CRC寄存器的内容右移一位(朝低位)，用0填补最高
              -位                */
  174   3                  else
-C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 4   
+C51 COMPILER V9.60.7.0   MODBUS                                                            08/25/2025 22:37:02 PAGE 4   
 
  175   3                  {
  176   4                      crc16 >>= 1;

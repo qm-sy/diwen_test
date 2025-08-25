@@ -40,7 +40,6 @@ void Uart2_Init( uint32_t baud )
     SREL0L = (uint8_t)baud;
 
     ES0 = 1;                //uart2 中断开启
-    EA  = 1;                //总中断开关
 }
 
 void Uart4_Init( uint32_t baud )

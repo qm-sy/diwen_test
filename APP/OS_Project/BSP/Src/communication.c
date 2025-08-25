@@ -297,6 +297,7 @@ void Tim1_Isr( void ) interrupt 3
     } 
 }
 
+
 // void uart2_send_byte( uint8_t byte )
 // {
 //     ES0 = 0;
@@ -321,3 +322,43 @@ void Tim1_Isr( void ) interrupt 3
 //     uart2_send_byte(c);
 //     return c;
 // }
+
+void press_scan( void )
+{
+    uint16_t reg_val = 0; 
+
+    if( press_flag == 1 )
+    {
+        sys_read_vp(0x2000,(uint8_t*)&reg_val,1);
+
+        if( reg_val != 0 )
+        {
+            switch(reg_val)
+            {
+                case 1:
+                    LED = 0;
+                    break;
+
+                case 2:
+                    LED = 1;
+                    break;
+                    
+                case 3:
+                    LED = 0;
+                    break;
+
+                case 4:
+                    LED = 1;
+                    break;
+                    
+                default:
+                    break;
+            }
+
+            reg_val = 0;
+            sys_write_vp(0x2000,(uint8_t*)&reg_val,1);
+        }
+
+        press_flag = 0;
+    }
+}

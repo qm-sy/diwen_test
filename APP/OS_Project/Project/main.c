@@ -17,9 +17,11 @@ void main()
 
 	Tim0_Init();
 	Tim1_Init();
-
+	
+	press_flag = 0;
 	delay_ms(200);
 
+	EA    = 1;              //总中断开关
 	LED = 1;
 	//printf(" ===== code start ====== \r\n");
 	while(1)
@@ -28,5 +30,6 @@ void main()
 		Modbus_Event_Uart2();
 		Modbus_Event_Uart4();
 		Modbus_Event_Uart5();
+		press_scan();
 	}
 }

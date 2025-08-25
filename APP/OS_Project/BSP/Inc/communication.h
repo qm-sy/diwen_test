@@ -55,4 +55,6 @@ void Uart4_Send_Statu_Init( void );
 void Uart5_Send_Statu_Init( void );
 void uart2_send_byte( uint8_t byte );
 void uart2_send_str( uint8_t *str,uint16_t len );
+void press_scan( void );
+
 #endif

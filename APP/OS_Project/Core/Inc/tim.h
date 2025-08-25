@@ -4,8 +4,7 @@
 #include "sys.h"
 #include "uart.h"
 
-extern uint8_t send_flag;
-extern uint16_t num_cnt;
+extern bit press_flag;
 
 #define T0_PERIOD_1MS 0xBCCD
 

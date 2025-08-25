@@ -5,7 +5,6 @@
 #include <STDIO.H>
 #include <string.h>
 
-//�����ض���
 typedef unsigned char   uint8_t;
 typedef unsigned short  uint16_t;
 typedef unsigned long   uint32_t;
@@ -15,19 +14,14 @@ typedef signed long     s32;
 
 sbit LED = P1^7;
 
-//���Ź��궨��
-#define	WDT_ON()				MUX_SEL|=0x02		//�������Ź�
-#define	WDT_OFF()				MUX_SEL&=0xFD		//�رտ��Ź�
-#define	WDT_RST()				MUX_SEL|=0x01		//ι��
+#define	WDT_ON()				MUX_SEL|=0x02		
+#define	WDT_OFF()				MUX_SEL&=0xFD		
+#define	WDT_RST()				MUX_SEL|=0x01		
 
 
-//ϵͳ��Ƶ��1ms��ʱ��ֵ����
 #define FOSC     				206438400UL
 #define T1MS    				(65536-FOSC/12/1000)
 
-
-
-//��������
 void sys_init(void);
 void delay_ms(uint16_t ms);
 void delay_us(uint16_t us);

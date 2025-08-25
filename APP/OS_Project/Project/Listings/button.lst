@@ -1,0 +1,26 @@
+C51 COMPILER V9.60.7.0   BUTTON                                                            08/25/2025 22:37:02 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE BUTTON
+OBJECT MODULE PLACED IN ..\Output\button.obj
+COMPILER INVOKED BY: D:\APP\KEIL\MDK\C51\BIN\C51.EXE ..\Emembed\Src\button.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BS
+                    -P\Inc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\button.lst) TABS(2) OBJECT(..\
+                    -Output\button.obj)
+
+line level    source
+
+   1          #include "button.h"
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

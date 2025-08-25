@@ -39,7 +39,6 @@ void sys_timer2_init()
 
 	IEN0 |= 0x20;	//启动定时器2
 	TR2 = 0x01;
-	EA = 1;
 }
 
 //系统初始化

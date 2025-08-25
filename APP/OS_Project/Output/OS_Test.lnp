@@ -5,7 +5,8 @@
 "..\Output\gpio.obj",
 "..\Output\communication.obj",
 "..\Output\sys.obj",
-"..\Output\modbus.obj" 
+"..\Output\modbus.obj",
+"..\Output\button.obj" 
 TO "..\Output\OS_Test" 
 PRINT(".\Listings\OS_Test.m51") RAMSIZE(256) 
 XDATA( 0X8000-0XFFFF )

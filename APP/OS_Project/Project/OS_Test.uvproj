@@ -444,6 +444,11 @@
               <FileType>1</FileType>
               <FilePath>..\Emembed\Src\modbus.c</FilePath>
             </File>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Emembed\Src\button.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -13,6 +13,7 @@
         "modbus.h": "c",
         "cstdint": "c",
         "main.h": "c",
-        "gpio.h": "c"
+        "gpio.h": "c",
+        "button.h": "c"
     }
 }
