@@ -1,179 +1,209 @@
-C51 COMPILER V9.60.7.0   UART                                                              08/24/2025 23:25:32 PAGE 1   
+C51 COMPILER V9.52.0.0   UART                                                              08/25/2025 16:17:13 PAGE 1   
 
 
-C51 COMPILER V9.60.7.0, COMPILATION OF MODULE UART
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
 OBJECT MODULE PLACED IN ..\Output\uart.obj
-COMPILER INVOKED BY: D:\APP\KEIL\MDK\C51\BIN\C51.EXE ..\Core\Src\uart.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\Inc
-                    -;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\uart.lst) TABS(2) OBJECT(..\Output\
-                    -uart.obj)
+COMPILER INVOKED BY: D:\APP\KEIL_V5\MDK\C51\BIN\C51.EXE ..\Core\Src\uart.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\
+                    -Inc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\uart.lst) TABS(2) OBJECT(..\Outp
+                    -ut\uart.obj)
 
 line level    source
 
    1          #include "uart.h"
    2          
-   3          uint8_t          xdata         R_u2[UART2_RX_LENTH];    //串口2接受数组
-   4          uint8_t          xdata         R_OD2 = 0;       //串口2收到数据
-   5          uint16_t         xdata         R_CN2 = 0;     //串口2长度计数器
-   6          uint8_t          xdata         T_O2  = 0;     //串口2超时计数器
-   7          bit                        Busy2 = 0;       //串口2发送标志
+   3          uint8_t  xdata R_u2[UART2_RX_LENTH];  //串口2接受数组
+   4          uint8_t  xdata R_OD2;             //串口2收到数据
+   5          uint16_t xdata R_CN2;           //串口2长度计数器
+   6          uint8_t  xdata T_O2;            //串口2超时计数器
+   7          bit        Busy2;             //串口2发送标志
    8          
-   9          bit                 Response_flog    = 0;  //应答用
-  10          bit                 Auto_data_upload = 0;//数据自动上传用
-  11          bit                 Crc_check_flog   = 0;//Crc校验标记
-  12          bit                 download_flag    = 0;
+   9          bit        Response_flog;       //应答用
+  10          bit        Auto_data_upload;    //数据自动上传用
+  11          bit        Crc_check_flog;      //Crc校验标记
+  12          bit        download_flag;     //串口2通讯与下载区分标志位
   13          
-  14          void Uart2_Init( uint32_t baud )
+  14          void burn_params_init( void )
   15          {
-  16   1          MUX_SEL |= 0X40;        //[6] = 1 时，IO口 P0.4、P0.5作为uart2接口
-  17   1      
-  18   1          P0MDOUT &= 0XCF;        //P0口输出配置
-  19   1          P0MDOUT |= 0X10;        //P0.4输出开启，P0.5输出关闭
-  20   1      
-  21   1          SCON0 = 0x50;           //uart2控制接口，SM1 = 1, REN0 = 1;
-  22   1          ADCON = 0x80;           //波特率发生器选择  0x00=T1 定时器，0x80=使用 SREL0H:L。
-  23   1          PCON &= 0x7f;           //[7] = 1 时，波特率倍频 为0则不倍频
-  24   1      
-  25   1          baud = 1024 - FOSC / 64 / baud;
-  26   1      
-  27   1          SREL0H = (uint8_t)(baud>>8);
-  28   1          SREL0L = (uint8_t)baud;
+  16   1        R_OD2 = 0;
+  17   1        R_CN2 = 0;
+  18   1        T_O2  = 0;
+  19   1        Busy2 = 0;
+  20   1        Response_flog    = 0;
+  21   1        Auto_data_upload = 0;
+  22   1        Crc_check_flog   = 0;
+  23   1        download_flag    = 1;
+  24   1      }
+  25          
+  26          void Uart2_Init( uint32_t baud )
+  27          {
+  28   1          MUX_SEL |= 0X40;        //[6] = 1 时，IO口 P0.4、P0.5作为uart2接口
   29   1      
-  30   1          ES0 = 1;                //uart2 中断开启
-  31   1          EA  = 1;                //总中断开关
-  32   1      }
-  33          
-  34          void Uart4_Init( uint32_t baud )
-  35          {
-  36   1        SCON2T= 0x80;       //发送使能和模式设置
-  37   1        SCON2R= 0x80;       //接受使能和模式设置 
-  38   1        ES2R = 1;           //中断接受使能
-  39   1          ES2T = 1;           //中断发送使能
-  40   1      
-  41   1          baud = 1024 - FOSC / 64 / baud;
-  42   1      
-  43   1          BODE2_DIV_H = (uint8_t)(baud>>8);
-  44   1          BODE2_DIV_L = (uint8_t)baud;
-  45   1      
-  46   1          P0MDOUT|=(1<<0); //p0^0 强推
-  47   1          // TR4=0;
-  48   1      }
-  49          
-  50          void uart_frame_deal( void )
-  51          {
-  52   1        //串口2数据收发
-  53   1        if(( R_OD2 == 1 ) && ( T_O2 == 0 ))
-C51 COMPILER V9.60.7.0   UART                                                              08/24/2025 23:25:32 PAGE 2   
+  30   1          P0MDOUT &= 0XCF;        //P0口输出配置
+  31   1          P0MDOUT |= 0X10;        //P0.4输出开启，P0.5输出关闭
+  32   1      
+  33   1          SCON0 = 0x50;           //uart2控制接口，SM1 = 1, REN0 = 1;
+  34   1          ADCON = 0x80;           //波特率发生器选择  0x00=T1 定时器，0x80=使用 SREL0H:L。
+  35   1          PCON &= 0x7f;           //[7] = 1 时，波特率倍频 为0则不倍频
+  36   1      
+  37   1          baud = 1024 - FOSC / 64 / baud;
+  38   1      
+  39   1          SREL0H = (uint8_t)(baud>>8);
+  40   1          SREL0L = (uint8_t)baud;
+  41   1      
+  42   1          ES0 = 1;                //uart2 中断开启
+  43   1          EA  = 1;                //总中断开关
+  44   1      }
+  45          
+  46          void Uart4_Init( uint32_t baud )
+  47          {
+  48   1        SCON2T= 0x80;       //发送使能和模式设置
+  49   1        SCON2R= 0x80;       //接受使能和模式设置 
+  50   1        ES2R = 1;           //中断接受使能
+  51   1          ES2T = 1;           //中断发送使能
+  52   1      
+  53   1          baud = FOSC/8/baud;
+C51 COMPILER V9.52.0.0   UART                                                              08/25/2025 16:17:13 PAGE 2   
 
-  54   1        {
-  55   2          R_OD2=0;
-  56   2          deal_uart_data(R_u2,(uint16_t*)(&R_CN2),2,RESPONSE_UART2,CRC_CHECK_UART2);
-  57   2          R_CN2=0;
-  58   2        } 
-  59   1      }
-  60          
-  61          void deal_uart_data(uint8_t* Arr_rece,uint16_t* Data_len,uint8_t Uart_num,bit Response,bit Crc_ck)
-  62          {
-  63   1        uint16_t N = 0; 
-  64   1        bit Flog = 1;
-  65   1      
-  66   1        while(Flog)
-  67   1        {   
-  68   2          if(( Arr_rece[N] == DTHD1 ) && ( Arr_rece[N+1] == DTHD2 ))   //5A A5 07 82 1000 0001 0002
-  69   2          {      
-  70   3            if( Arr_rece[N+3] == 0x82 )     
-  71   3            {    
-  72   4              Response_flog = Response;       //应答标记
-  73   4              Crc_check_flog = Crc_ck;        //Crc标记
-  74   4              deal_82_cmd(Uart_num,Arr_rece + N);   //处理82指令
-  75   4              N = N + Arr_rece[N + 2] + 2;
-  76   4            }                         // 0  1  2  3  4  5  6  7 8  9 10
-  77   3            else if( Arr_rece[N + 3] == 0x83 )        //5A A5 08 83 1000 02 0001 0002
-  78   3            {     
-  79   4              uint8_t Val[FRAME_LEN] = {0}; 
-  80   4              Crc_check_flog = Crc_ck;        //Crc标记
-  81   4              deal_83_cmd(Uart_num, Val, Arr_rece + N);//处理83指令
-  82   4              N = N + Arr_rece[N + 2] + 2;
-  83   4            }else
-  84   3            {
-  85   4              N++;
-  86   4            }   
-  87   3          }
-  88   2          if( N < (*Data_len - 4)) 
-  89   2          {
-  90   3            N++;
-  91   3          }
-  92   2          else 
-  93   2          {
-  94   3            Flog=0; 
-  95   3          }           
-  96   2        }
-  97   1      }
-  98          
-  99          void  deal_82_cmd(uint8_t Uart, uint8_t* arr)
- 100          {    
- 101   1        uint8_t i=0;
- 102   1        if( Crc_check_flog == 0 ) //不含CRC检验
- 103   1        {    
- 104   2          if(arr[4] == 0x00 && arr[5] == 0x06)
- 105   2          {
- 106   3            Write_Dgus(0x0006,0x5aa5);
- 107   3            Write_Dgus(0x0007,0X8000);
- 108   3          }else
- 109   2          {
- 110   3            Write_Dgusii_Vp_byChar((arr[4] << 8) + arr[5],arr + 6,arr[2] - 3);  
- 111   3          }
- 112   2          
- 113   2          if( Response_flog == 1 )   
- 114   2          {
- 115   3            uint8_t Temp_arr[]={DTHD1,DTHD2,0X03,0X82,0X4F,0X4B};   
-C51 COMPILER V9.60.7.0   UART                                                              08/24/2025 23:25:32 PAGE 3   
+  54   1      
+  55   1          BODE2_DIV_H = (uint8_t)(baud>>8);
+  56   1          BODE2_DIV_L = (uint8_t)baud;
+  57   1      
+  58   1          P0MDOUT|=(1<<0); //p0^0 强推
+  59   1          // TR4=0;
+  60   1      }
+  61          
+  62          void Uart5_Init( uint32_t baud )
+  63          {
+  64   1        SCON3T= 0x80;       //发送使能和模式设置
+  65   1        SCON3R= 0x80;       //接受使能和模式设置 
+  66   1        ES3R = 1;           //中断接受使能
+  67   1          ES3T = 1;           //中断发送使能
+  68   1      
+  69   1          baud = FOSC/8/baud;
+  70   1      
+  71   1        BODE3_DIV_H = (uint8_t)(baud>>8);
+  72   1          BODE3_DIV_L = (uint8_t)baud;
+  73   1      
+  74   1          P0MDOUT|=(1<<1); //p0^1 强推
+  75   1          // TR5=0;
+  76   1      }
+  77          
+  78          void uart_frame_deal( void )
+  79          {
+  80   1        //串口2数据收发
+  81   1        if(( R_OD2 == 1 ) && ( T_O2 == 0 ))
+  82   1        {
+  83   2          R_OD2=0;
+  84   2          deal_uart_data(R_u2,(uint16_t*)(&R_CN2),2,RESPONSE_UART2,CRC_CHECK_UART2);
+  85   2          R_CN2=0;
+  86   2        } 
+  87   1      }
+  88          
+  89          void deal_uart_data(uint8_t* Arr_rece,uint16_t* Data_len,uint8_t Uart_num,bit Response,bit Crc_ck)
+  90          {
+  91   1        uint16_t N = 0; 
+  92   1        bit Flog = 1;
+  93   1      
+  94   1        while(Flog)
+  95   1        {   
+  96   2          if(( Arr_rece[N] == DTHD1 ) && ( Arr_rece[N+1] == DTHD2 ))   //5A A5 07 82 1000 0001 0002
+  97   2          {      
+  98   3            if( Arr_rece[N+3] == 0x82 )     
+  99   3            {    
+ 100   4              Response_flog = Response;       //应答标记
+ 101   4              Crc_check_flog = Crc_ck;        //Crc标记
+ 102   4              deal_82_cmd(Uart_num,Arr_rece + N);   //处理82指令
+ 103   4              N = N + Arr_rece[N + 2] + 2;
+ 104   4            }                         // 0  1  2  3  4  5  6  7 8  9 10
+ 105   3            else if( Arr_rece[N + 3] == 0x83 )        //5A A5 08 83 1000 02 0001 0002
+ 106   3            {     
+ 107   4              uint8_t Val[FRAME_LEN] = {0}; 
+ 108   4              Crc_check_flog = Crc_ck;        //Crc标记
+ 109   4              deal_83_cmd(Uart_num, Val, Arr_rece + N);//处理83指令
+ 110   4              N = N + Arr_rece[N + 2] + 2;
+ 111   4            }else
+ 112   3            {
+ 113   4              N++;
+ 114   4            }   
+ 115   3          }
+C51 COMPILER V9.52.0.0   UART                                                              08/25/2025 16:17:13 PAGE 3   
 
- 116   3                        
- 117   3            for(i = 0; i < 6; i++)
- 118   3            {
- 119   4              uart_send_byte(Uart,Temp_arr[i]); //5A A5 03 82 4F 4B
- 120   4            }                    
- 121   3          }
- 122   2        }
- 123   1      }
- 124          
- 125          /****************************************************************************/
- 126          void  deal_83_cmd(uint8_t Uart,uint8_t* arr,uint8_t* arr1)
- 127          {
- 128   1          uint8_t i=0;
- 129   1          if(Crc_check_flog==0) //不含CRC检验
- 130   1          {   
- 131   2              for( i = 0; i < 7; i++ )
- 132   2              {
- 133   3                  arr[i]=arr1[i];
- 134   3              }
- 135   2      
- 136   2              sys_read_vp((arr[4] << 8) + arr[5],(uint8_t*) & arr[7],arr[6]);
- 137   2              arr[2]=(2 * arr[6]) + 4;
- 138   2      
- 139   2              for(i = 0; i < (arr[2] + 3); i++)
- 140   2              {
- 141   3                  uart_send_byte(Uart,arr[i]);
- 142   3              }                              
- 143   2          }
- 144   1      }
- 145          
- 146          void uart_send_byte(uint8_t Uart_number,uint8_t Dat)
- 147          {
- 148   1          download_flag = 1;
- 149   1          if( Uart_number == 2 )
- 150   1          {
- 151   2              while (Busy2);               
- 152   2              Busy2 = 1;
- 153   2              SBUF0 = Dat;         
- 154   2          }
- 155   1      }
+ 116   2          if( N < (*Data_len - 4)) 
+ 117   2          {
+ 118   3            N++;
+ 119   3          }
+ 120   2          else 
+ 121   2          {
+ 122   3            Flog=0; 
+ 123   3          }           
+ 124   2        }
+ 125   1      }
+ 126          
+ 127          void  deal_82_cmd(uint8_t Uart, uint8_t* arr)
+ 128          {    
+ 129   1        uint8_t i=0;
+ 130   1        if( Crc_check_flog == 0 ) //不含CRC检验
+ 131   1        {    
+ 132   2          if(arr[4] == 0x00 && arr[5] == 0x06)
+ 133   2          {
+ 134   3            Write_Dgus(0x0006,0x5aa5);
+ 135   3            Write_Dgus(0x0007,0X8000);
+ 136   3          }else
+ 137   2          {
+ 138   3            Write_Dgusii_Vp_byChar((arr[4] << 8) + arr[5],arr + 6,arr[2] - 3);  
+ 139   3          }
+ 140   2          
+ 141   2          if( Response_flog == 1 )   
+ 142   2          {
+ 143   3            uint8_t Temp_arr[]={DTHD1,DTHD2,0X03,0X82,0X4F,0X4B};   
+ 144   3                        
+ 145   3            for(i = 0; i < 6; i++)
+ 146   3            {
+ 147   4              uart_send_byte(Uart,Temp_arr[i]); //5A A5 03 82 4F 4B
+ 148   4            }                    
+ 149   3          }
+ 150   2        }
+ 151   1      }
+ 152          
+ 153          /****************************************************************************/
+ 154          void  deal_83_cmd(uint8_t Uart,uint8_t* arr,uint8_t* arr1)
+ 155          {
+ 156   1          uint8_t i=0;
+ 157   1          if(Crc_check_flog==0) //不含CRC检验
+ 158   1          {   
+ 159   2              for( i = 0; i < 7; i++ )
+ 160   2              {
+ 161   3                  arr[i]=arr1[i];
+ 162   3              }
+ 163   2      
+ 164   2              sys_read_vp((arr[4] << 8) + arr[5],(uint8_t*) & arr[7],arr[6]);
+ 165   2              arr[2]=(2 * arr[6]) + 4;
+ 166   2      
+ 167   2              for(i = 0; i < (arr[2] + 3); i++)
+ 168   2              {
+ 169   3                  uart_send_byte(Uart,arr[i]);
+ 170   3              }                              
+ 171   2          }
+ 172   1      }
+ 173          
+ 174          void uart_send_byte(uint8_t Uart_number,uint8_t Dat)
+ 175          {
+ 176   1          download_flag = 1;
+ 177   1          if( Uart_number == 2 )
+C51 COMPILER V9.52.0.0   UART                                                              08/25/2025 16:17:13 PAGE 4   
+
+ 178   1          {
+ 179   2              while (Busy2);               
+ 180   2              Busy2 = 1;
+ 181   2              SBUF0 = Dat;         
+ 182   2          }
+ 183   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1104    ----
+   CODE SIZE        =   1197    ----
    CONSTANT SIZE    =    261    ----
-   XDATA SIZE       =   2052     291
+   XDATA SIZE       =   2052     295
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -1,162 +1,210 @@
-C51 COMPILER V9.60.7.0   MODBUS                                                            08/24/2025 23:25:32 PAGE 1   
+C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 1   
 
 
-C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MODBUS
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MODBUS
 OBJECT MODULE PLACED IN ..\Output\modbus.obj
-COMPILER INVOKED BY: D:\APP\KEIL\MDK\C51\BIN\C51.EXE ..\Emembed\Src\modbus.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BS
-                    -P\Inc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\modbus.lst) TABS(2) OBJECT(..\
-                    -Output\modbus.obj)
+COMPILER INVOKED BY: D:\APP\KEIL_V5\MDK\C51\BIN\C51.EXE ..\Emembed\Src\modbus.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..
+                    -\BSP\Inc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\modbus.lst) TABS(2) OBJECT(
+                    -..\Output\modbus.obj)
 
 line level    source
 
    1          #include "modbus.h"
    2          
-   3          
-   4          void Modbus_Event_Uart4( void )
-   5          {
-   6   1          uint16_t crc,rccrc = 0;
-   7   1      
-   8   1          /*1.接收完毕                                           */
-   9   1          if( rs485_4.RX4_rev_end_Flag == 1 )
-  10   1          {
-  11   2              /*2.清空接收完毕标志位                              */    
-  12   2              rs485_4.RX4_rev_end_Flag = 0;
-  13   2      
-  14   2              // printf("00: 0x%02x \r\n",rs485_4.RX4_buf[0]);
-  15   2              // printf("01: 0x%02x \r\n",rs485_4.RX4_buf[1]);
-  16   2              // printf("02: 0x%02x \r\n",rs485_4.RX4_buf[2]);
-  17   2              // printf("03: 0x%02x \r\n",rs485_4.RX4_buf[3]);
-  18   2              // printf("04: 0x%02x \r\n",rs485_4.RX4_buf[4]);
-  19   2              // printf("05: 0x%02x \r\n",rs485_4.RX4_buf[5]);
-  20   2              // printf("06: 0x%02x \r\n",rs485_4.RX4_buf[6]);
-  21   2              // printf("07: 0x%02x \r\n",rs485_4.RX4_buf[7]);
-  22   2              /*3.CRC校验                                         */
-  23   2              crc = MODBUS_CRC16(rs485_4.RX4_buf, rs485_4.RX4_rev_cnt-2);
-  24   2              rccrc = (rs485_4.RX4_buf[rs485_4.RX4_rev_cnt-1]) | (rs485_4.RX4_buf[rs485_4.RX4_rev_cnt-2]<<8);
-  25   2      
-  26   2              /*4.清空接收计数                                    */
-  27   2              rs485_4.RX4_rev_cnt = 0; 
-  28   2      
-  29   2              /*5.CRC校验通过，进行地址域校验                      */
-  30   2              if( crc == rccrc )
-  31   2              {
-  32   3                          LED = !LED;
-  33   3                  /*6.地址域校验通过，进入相应功能函数进行处理      */
-  34   3                  if( rs485_4.RX4_buf[0] == 0x01 )
-  35   3                  {
-  36   4                      switch ( rs485_4.RX4_buf[1] )
-  37   4                      {
-  38   5                          case 0x06:
-  39   5                              Modbus_Fun6();
-  40   5                              break;  
-  41   5      
-  42   5                          default:
-  43   5                              break;
-  44   5                      }
-  45   4                  }
-  46   3              }
-  47   2          }
-  48   1      }
-  49          
-  50          void Modbus_Event_Uart2( void )
-  51          {
-  52   1          uint16_t crc,rccrc = 0;
-  53   1      
-C51 COMPILER V9.60.7.0   MODBUS                                                            08/24/2025 23:25:32 PAGE 2   
+   3          void Modbus_Event_Uart2( void )
+   4          {
+   5   1          uint16_t crc,rccrc = 0;
+   6   1      
+   7   1          /*1.接收完毕                                           */
+   8   1          if( rs485_2.RX2_rev_end_Flag == 1 )
+   9   1          {
+  10   2              /*2.清空接收完毕标志位                              */    
+  11   2              rs485_2.RX2_rev_end_Flag = 0;
+  12   2      
+  13   2              /*3.CRC校验                                         */
+  14   2              crc = MODBUS_CRC16(rs485_2.RX2_buf, rs485_2.RX2_rev_cnt-2);
+  15   2              rccrc = (rs485_2.RX2_buf[rs485_2.RX2_rev_cnt-1]) | (rs485_2.RX2_buf[rs485_2.RX2_rev_cnt-2]<<8);
+  16   2      
+  17   2              /*4.清空接收计数                                    */
+  18   2              rs485_2.RX2_rev_cnt = 0; 
+  19   2      
+  20   2              /*5.CRC校验通过，进行地址域校验                      */
+  21   2              if( crc == rccrc )
+  22   2              {
+  23   3                          
+  24   3                  /*6.地址域校验通过，进入相应功能函数进行处理      */
+  25   3                  if( rs485_2.RX2_buf[0] == 0x01 )
+  26   3                  {
+  27   4                      switch ( rs485_2.RX2_buf[1] )
+  28   4                      {
+  29   5                          case 0x06:
+  30   5                              Modbus_Fun6();
+  31   5                              break;  
+  32   5      
+  33   5                          default:
+  34   5                              break;
+  35   5                      }
+  36   4                  }
+  37   3              }
+  38   2          }
+  39   1      }
+  40          
+  41          void Modbus_Event_Uart4( void )
+  42          {
+  43   1          uint16_t crc,rccrc = 0;
+  44   1      
+  45   1          /*1.接收完毕                                           */
+  46   1          if( rs485_4.RX4_rev_end_Flag == 1 )
+  47   1          {
+  48   2              /*2.清空接收完毕标志位                              */    
+  49   2              rs485_4.RX4_rev_end_Flag = 0;
+  50   2      
+  51   2              /*3.CRC校验                                         */
+  52   2              crc = MODBUS_CRC16(rs485_4.RX4_buf, rs485_4.RX4_rev_cnt-2);
+  53   2              rccrc = (rs485_4.RX4_buf[rs485_4.RX4_rev_cnt-1]) | (rs485_4.RX4_buf[rs485_4.RX4_rev_cnt-2]<<8);
+C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 2   
 
-  54   1          /*1.接收完毕                                           */
-  55   1          if( rs485_2.RX2_rev_end_Flag == 1 )
-  56   1          {
-  57   2              /*2.清空接收完毕标志位                              */    
-  58   2              rs485_2.RX2_rev_end_Flag = 0;
-  59   2      
-  60   2              /*3.CRC校验                                         */
-  61   2              crc = MODBUS_CRC16(rs485_2.RX2_buf, rs485_2.RX2_rev_cnt-2);
-  62   2              rccrc = (rs485_2.RX2_buf[rs485_2.RX2_rev_cnt-1]) | (rs485_2.RX2_buf[rs485_2.RX2_rev_cnt-2]<<8);
-  63   2      
-  64   2              /*4.清空接收计数                                    */
-  65   2              rs485_2.RX2_rev_cnt = 0; 
-  66   2      
-  67   2              /*5.CRC校验通过，进行地址域校验                      */
-  68   2              if( crc == rccrc )
-  69   2              {
-  70   3                          
-  71   3                  /*6.地址域校验通过，进入相应功能函数进行处理      */
-  72   3                  if( rs485_2.RX2_buf[0] == 0x01 )
-  73   3                  {
-  74   4                      switch ( rs485_2.RX2_buf[1] )
-  75   4                      {
-  76   5                          case 0x06:
-  77   5                              Modbus_Fun6();
-  78   5                              break;  
-  79   5      
-  80   5                          default:
-  81   5                              break;
-  82   5                      }
-  83   4                  }
-  84   3              }
-  85   2          }
-  86   1      }
-  87          
-  88          void Modbus_Fun6( void )
-  89          {
-  90   1          memcpy(rs485_2.TX2_buf,rs485_2.RX2_buf,8);
-  91   1      
-  92   1          download_flag = 0;
-  93   1          rs485_2.TX2_send_bytelength = 8;
-  94   1      
-  95   1          TI0 = 1;                              //开始发送
-  96   1      
-  97   1          //SCON2T |= S4TI;  
-  98   1      }
-  99          
- 100          /**
- 101           * @brief crc校验函数
- 102           * 
- 103           * @param   buf：  Address(1 byte) +Funtion(1 byte) ）+Data(n byte)   
- 104           * @param   length:数据长度           
- 105           * 
- 106            @return  crc16:crc校验的值 2byte
- 107           */
- 108          uint16_t MODBUS_CRC16(uint8_t *buf, uint8_t length)
- 109          {
- 110   1        uint8_t i;
- 111   1        uint16_t  crc16;
- 112   1      
- 113   1          /* 1, 预置16位CRC寄存器为0xffff（即全为1）                          */
- 114   1        crc16 = 0xffff; 
- 115   1      
-C51 COMPILER V9.60.7.0   MODBUS                                                            08/24/2025 23:25:32 PAGE 3   
+  54   2      
+  55   2              /*4.清空接收计数                                    */
+  56   2              rs485_4.RX4_rev_cnt = 0; 
+  57   2      
+  58   2              /*5.CRC校验通过，进行地址域校验                      */
+  59   2              if( crc == rccrc )
+  60   2              {
+  61   3                  /*6.地址域校验通过，进入相应功能函数进行处理      */
+  62   3                  if( rs485_4.RX4_buf[0] == 0x01 )
+  63   3                  {
+  64   4                      switch ( rs485_4.RX4_buf[1] )
+  65   4                      {
+  66   5                          case 0x06:
+  67   5                              Modbus_Fun6();
+  68   5                              break;  
+  69   5      
+  70   5                          default:
+  71   5                              break;
+  72   5                      }
+  73   4                  }
+  74   3              }
+  75   2          }
+  76   1      }
+  77          
+  78          void Modbus_Event_Uart5( void )
+  79          {
+  80   1          uint16_t crc,rccrc = 0;
+  81   1      
+  82   1          /*1.接收完毕                                           */
+  83   1          if( rs485_5.RX5_rev_end_Flag == 1 )
+  84   1          {
+  85   2              /*2.清空接收完毕标志位                              */    
+  86   2              rs485_5.RX5_rev_end_Flag = 0;
+  87   2      
+  88   2              /*3.CRC校验                                         */
+  89   2              crc = MODBUS_CRC16(rs485_5.RX5_buf, rs485_5.RX5_rev_cnt-2);
+  90   2              rccrc = (rs485_5.RX5_buf[rs485_5.RX5_rev_cnt-1]) | (rs485_5.RX5_buf[rs485_5.RX5_rev_cnt-2]<<8);
+  91   2      
+  92   2              /*4.清空接收计数                                    */
+  93   2              rs485_5.RX5_rev_cnt = 0; 
+  94   2      
+  95   2              /*5.CRC校验通过，进行地址域校验                      */
+  96   2              if( crc == rccrc )
+  97   2              {
+  98   3                  /*6.地址域校验通过，进入相应功能函数进行处理      */
+  99   3                  if( rs485_5.RX5_buf[0] == 0x01 )
+ 100   3                  {
+ 101   4                      switch ( rs485_5.RX5_buf[1] )
+ 102   4                      {
+ 103   5                          case 0x06:
+ 104   5                              Modbus_Fun6();
+ 105   5                              break;  
+ 106   5      
+ 107   5                          default:
+ 108   5                              break;
+ 109   5                      }
+ 110   4                  }
+ 111   3              }
+ 112   2          }
+ 113   1      }
+ 114          
+ 115          void Modbus_Fun6( void )
+C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 3   
 
- 116   1        do
- 117   1        {
- 118   2              /* 2, 把8位数据与16位CRC寄存器的低位相异或，把结果放于CRC寄存器     */    
+ 116          {
+ 117   1          // memcpy(rs485_2.TX2_buf,rs485_2.RX2_buf,8);
+ 118   1      
+ 119   1          // download_flag = 0;
+ 120   1          // rs485_2.TX2_send_bytelength = 8;
+ 121   1      
+ 122   1          // TI0 = 1;                              //开始发送
+ 123   1      
+ 124   1          // memcpy(rs485_4.TX4_buf,rs485_4.RX4_buf,8);
+ 125   1      
+ 126   1          // download_flag = 0;
+ 127   1          // rs485_4.TX4_send_bytelength = 8;
+ 128   1      
+ 129   1          // SCON2T |= S4TI;  
+ 130   1      
+ 131   1          //memcpy(rs485_5.TX5_buf,rs485_5.RX5_buf,8);
+ 132   1      
+ 133   1          rs485_5.TX5_buf[0] = 0x00;
+ 134   1          rs485_5.TX5_buf[1] = 0x01;
+ 135   1          rs485_5.TX5_buf[2] = 0x02;
+ 136   1          rs485_5.TX5_buf[3] = 0x03;
+ 137   1          rs485_5.TX5_buf[4] = 0x04;
+ 138   1          rs485_5.TX5_buf[5] = 0x05;
+ 139   1      
+ 140   1          download_flag = 0;
+ 141   1          rs485_5.TX5_send_bytelength = 6;
+ 142   1      
+ 143   1          SCON3T |= S5TI;  
+ 144   1      }
+ 145          
+ 146          /**
+ 147           * @brief crc校验函数
+ 148           * 
+ 149           * @param   buf：  Address(1 byte) +Funtion(1 byte) ）+Data(n byte)   
+ 150           * @param   length:数据长度           
+ 151           * 
+ 152            @return  crc16:crc校验的值 2byte
+ 153           */
+ 154          uint16_t MODBUS_CRC16(uint8_t *buf, uint8_t length)
+ 155          {
+ 156   1        uint8_t i;
+ 157   1        uint16_t  crc16;
+ 158   1      
+ 159   1          /* 1, 预置16位CRC寄存器为0xffff（即全为1）                          */
+ 160   1        crc16 = 0xffff; 
+ 161   1      
+ 162   1        do
+ 163   1        {
+ 164   2              /* 2, 把8位数据与16位CRC寄存器的低位相异或，把结果放于CRC寄存器     */    
              -    
- 119   2          crc16 ^= (uint16_t)*buf;    //
- 120   2          for(i=0; i<8; i++)    
- 121   2          {
- 122   3                  /* 3, 如果最低位为1，把CRC寄存器的内容右移一位(朝低位)，用0填补最高
+ 165   2          crc16 ^= (uint16_t)*buf;    //
+ 166   2          for(i=0; i<8; i++)    
+ 167   2          {
+ 168   3                  /* 3, 如果最低位为1，把CRC寄存器的内容右移一位(朝低位)，用0填补最高
              -位 再异或0xA001    */
- 123   3            if(crc16 & 1)
- 124   3                  {
- 125   4                      crc16 = (crc16 >> 1) ^ 0xA001;
- 126   4                  }
- 127   3                  /* 4, 如果最低位为0，把CRC寄存器的内容右移一位(朝低位)，用0填补最高
+ 169   3            if(crc16 & 1)
+ 170   3                  {
+ 171   4                      crc16 = (crc16 >> 1) ^ 0xA001;
+ 172   4                  }
+ 173   3                  /* 4, 如果最低位为0，把CRC寄存器的内容右移一位(朝低位)，用0填补最高
              -位                */
- 128   3                  else
- 129   3                  {
- 130   4                      crc16 >>= 1;
- 131   4                  }   
- 132   3          }
- 133   2          buf++;
- 134   2        }while(--length != 0);
- 135   1      
- 136   1        return  (crc16);
- 137   1      }
+ 174   3                  else
+C51 COMPILER V9.52.0.0   MODBUS                                                            08/25/2025 16:17:13 PAGE 4   
+
+ 175   3                  {
+ 176   4                      crc16 >>= 1;
+ 177   4                  }   
+ 178   3          }
+ 179   2          buf++;
+ 180   2        }while(--length != 0);
+ 181   1      
+ 182   1        return  (crc16);
+ 183   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    310    ----
+   CODE SIZE        =    397    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----       3
    PDATA SIZE       =   ----    ----

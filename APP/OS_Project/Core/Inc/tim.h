@@ -4,6 +4,9 @@
 #include "sys.h"
 #include "uart.h"
 
+extern uint8_t send_flag;
+extern uint16_t num_cnt;
+
 #define T0_PERIOD_1MS 0xBCCD
 
 void Tim0_Init( void );   

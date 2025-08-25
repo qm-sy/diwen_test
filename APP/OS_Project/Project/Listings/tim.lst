@@ -1,57 +1,59 @@
-C51 COMPILER V9.60.7.0   TIM                                                               08/24/2025 23:25:32 PAGE 1   
+C51 COMPILER V9.52.0.0   TIM                                                               08/25/2025 16:17:13 PAGE 1   
 
 
-C51 COMPILER V9.60.7.0, COMPILATION OF MODULE TIM
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE TIM
 OBJECT MODULE PLACED IN ..\Output\tim.obj
-COMPILER INVOKED BY: D:\APP\KEIL\MDK\C51\BIN\C51.EXE ..\Core\Src\tim.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\Inc;
-                    -..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\tim.lst) TABS(2) OBJECT(..\Output\ti
-                    -m.obj)
+COMPILER INVOKED BY: D:\APP\KEIL_V5\MDK\C51\BIN\C51.EXE ..\Core\Src\tim.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\BSP\I
+                    -nc;..\Core\Inc;..\Driver;..\Emembed\Inc;..\SYSTEM) DEBUG OBJECTEXTEND PRINT(.\Listings\tim.lst) TABS(2) OBJECT(..\Output
+                    -\tim.obj)
 
 line level    source
 
    1          #include "tim.h"
    2          
-   3          
-   4          void Tim0_Init( void )      //1ms
-   5          {
-   6   1          TMOD &= 0xfc;           //设置为16bit的定时器工作模式
-   7   1          TMOD |= 0x00;           //T0_M1 = 0 T0_M0 = 0: 16位自动重装载模式 
-   8   1      
-   9   1          TH0   = (uint8_t)(T0_PERIOD_1MS>>8);
-  10   1          TL0   = (uint8_t)T0_PERIOD_1MS;        
-  11   1      
-  12   1          ET0   = 1;              //使能中断
-  13   1          EA    = 1;              //总中断开关
-  14   1          TR0   = 1;              //启动T0定时器
-  15   1          //TF0 = 0;              //硬件自动清0
-  16   1      }
-  17          
-  18          void Tim1_Init( void )      //1ms
-  19          {
-  20   1          TMOD &= 0xcf;           //设置为16bit的定时器工作模式
-  21   1          TMOD |= 0x00;           //T1_M1 = 0 T1_M0 = 0: 16位自动重装载模式 
-  22   1      
-  23   1          TH1   = (uint8_t)(T0_PERIOD_1MS>>8);
-  24   1          TL1   = (uint8_t)T0_PERIOD_1MS;        
-  25   1      
-  26   1          ET1   = 1;              //使能中断
-  27   1          EA    = 1;              //总中断开关
-  28   1          TR1   = 1;              //启动T1定时器
-  29   1          //TF1 = 0;              //硬件自动清0
-  30   1      }
-  31          
-  32          void Tim0_Isr( void ) interrupt 1
-  33          {
-  34   1        if(T_O2 > 0)
-  35   1          {
-  36   2              T_O2--;
-  37   2          }
-  38   1      }
-  39          
+   3          void Tim0_Init( void )      //1ms
+   4          {
+   5   1          TMOD &= 0xfc;           //设置为16bit的定时器工作模式
+   6   1          TMOD |= 0x01;           //T0_M1 = 0 T0_M0 = 0: 16位自动重装载模式 
+   7   1      
+   8   1          TH0   = (uint8_t)(T0_PERIOD_1MS>>8);
+   9   1          TL0   = (uint8_t)T0_PERIOD_1MS;   
+  10   1      
+  11   1          ET0   = 1;              //使能中断
+  12   1          EA    = 1;              //总中断开关
+  13   1          TR0   = 1;              //启动T0定时器
+  14   1          //TF0 = 0;              //硬件自动清0
+  15   1      }
+  16          
+  17          void Tim1_Init( void )      //1ms
+  18          {
+  19   1          TMOD &= 0xcf;           //设置为16bit的定时器工作模式
+  20   1          TMOD |= 0x10;           //T1_M1 = 0 T1_M0 = 0: 16位自动重装载模式 
+  21   1      
+  22   1          TH1   = (uint8_t)(T0_PERIOD_1MS>>8);
+  23   1          TL1   = (uint8_t)T0_PERIOD_1MS;        
+  24   1      
+  25   1          ET1   = 1;              //使能中断
+  26   1          EA    = 1;              //总中断开关
+  27   1          TR1   = 1;              //启动T1定时器
+  28   1          //TF1 = 0;              //硬件自动清0
+  29   1      }
+  30          
+  31          void Tim0_Isr( void ) interrupt 1
+  32          {
+  33   1          TH0   = (uint8_t)(T0_PERIOD_1MS>>8);
+  34   1          TL0   = (uint8_t)T0_PERIOD_1MS;      
+  35   1      
+  36   1        if(T_O2 > 0)
+  37   1          {
+  38   2              T_O2--;
+  39   2          }
+  40   1      }
+  41          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     61    ----
+   CODE SIZE        =     73    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

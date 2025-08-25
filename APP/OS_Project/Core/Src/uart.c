@@ -1,15 +1,27 @@
 #include "uart.h"
 
-uint8_t          xdata         R_u2[UART2_RX_LENTH];	  //串口2接受数组
-uint8_t          xdata         R_OD2 = 0;	      //串口2收到数据
-uint16_t         xdata         R_CN2 = 0;		  //串口2长度计数器
-uint8_t          xdata         T_O2  = 0;		  //串口2超时计数器
-bit			                   Busy2 = 0;	      //串口2发送标志
+uint8_t	 xdata R_u2[UART2_RX_LENTH];	//串口2接受数组
+uint8_t	 xdata R_OD2;	      			//串口2收到数据
+uint16_t xdata R_CN2;		  			//串口2长度计数器
+uint8_t	 xdata T_O2;		  			//串口2超时计数器
+bit 		   Busy2;	      			//串口2发送标志
 
-bit                 Response_flog    = 0;  //应答用
-bit                 Auto_data_upload = 0;//数据自动上传用
-bit                 Crc_check_flog   = 0;//Crc校验标记
-bit                 download_flag    = 0;
+bit			   Response_flog;  			//应答用
+bit			   Auto_data_upload;		//数据自动上传用
+bit			   Crc_check_flog;			//Crc校验标记
+bit			   download_flag;			//串口2通讯与下载区分标志位
+
+void burn_params_init( void )
+{
+	R_OD2 = 0;
+	R_CN2 = 0;
+	T_O2  = 0;
+	Busy2 = 0;
+	Response_flog    = 0;
+	Auto_data_upload = 0;
+	Crc_check_flog   = 0;
+	download_flag    = 1;
+}
 
 void Uart2_Init( uint32_t baud )
 {
@@ -38,13 +50,29 @@ void Uart4_Init( uint32_t baud )
 	ES2R = 1;           //中断接受使能
     ES2T = 1;           //中断发送使能
 
-    baud = 1024 - FOSC / 64 / baud;
+    baud = FOSC/8/baud;
 
     BODE2_DIV_H = (uint8_t)(baud>>8);
     BODE2_DIV_L = (uint8_t)baud;
 
     P0MDOUT|=(1<<0); //p0^0 强推
     // TR4=0;
+}
+
+void Uart5_Init( uint32_t baud )
+{
+	SCON3T= 0x80;       //发送使能和模式设置
+	SCON3R= 0x80;       //接受使能和模式设置 
+	ES3R = 1;           //中断接受使能
+    ES3T = 1;           //中断发送使能
+
+    baud = FOSC/8/baud;
+
+	BODE3_DIV_H = (uint8_t)(baud>>8);
+    BODE3_DIV_L = (uint8_t)baud;
+
+    P0MDOUT|=(1<<1); //p0^1 强推
+    // TR5=0;
 }
 
 void uart_frame_deal( void )

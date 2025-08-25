@@ -49,8 +49,10 @@ extern bit Auto_data_upload;    //数据自动上传用
 extern bit Crc_check_flog;      //Crc校验标记
 extern bit download_flag;
 
+void burn_params_init( void );
 void Uart2_Init( uint32_t baud );
 void Uart4_Init( uint32_t baud );
+void Uart5_Init( uint32_t baud );
 void uart_frame_deal( void );
 void deal_uart_data(uint8_t* Arr_rece,uint16_t* Data_len,uint8_t Uart_num,bit Response,bit Crc_ck);
 void deal_82_cmd(uint8_t Uart,uint8_t* arr);

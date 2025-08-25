@@ -71,7 +71,7 @@ void delay_ms(uint16_t ms)
 {
     int data mi,mj;
     for(mi=0;mi<ms;mi++)
-        for(mj=0;mj<8600;mj++);
+        for(mj=0;mj<18500;mj++);
 }
 
 void delay_us(uint16_t us)

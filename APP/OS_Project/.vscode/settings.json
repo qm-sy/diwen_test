@@ -5,6 +5,8 @@
     "files.associations": {
         "uart.h": "c",
         "sys.h": "c",
-        "tim.h": "c"
+        "tim.h": "c",
+        "communication.h": "c",
+        "modbus.h": "c"
     }
 }
